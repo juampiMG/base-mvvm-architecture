@@ -17,6 +17,7 @@ import com.jp.app.common.viewModel.BaseViewModel;
 import com.jp.app.databinding.SampleFragmentBinding;
 import com.jp.app.model.SampleView;
 import com.jp.app.ui.sample.adapter.SampleAdapter;
+import com.jp.app.ui.sample.viewModel.ISampleViewModel;
 import com.jp.app.ui.sample.viewModel.SampleViewModel;
 
 import java.util.ArrayList;
@@ -102,7 +103,7 @@ public class SampleFragment extends BaseFragment<SampleFragmentBinding, SampleFr
     }
 
     private void subscribeToLiveData() {
-        ((SampleViewModel) mViewModel).getSamples().observe(this, samples -> ((SampleViewModel) mViewModel).addSamples(samples));
+        ((SampleViewModel) mViewModel).getSamples().observe(this, samples -> ((ISampleViewModel) mViewModel).addSamples(samples));
     }
 }
 

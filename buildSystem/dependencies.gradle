@@ -31,7 +31,7 @@ ext {
     robolectricVersion = '3.8'
     mockitoVersion = '1.10.19'
     assertjVersion = '1.1.0'
-
+    robolectricShadowVersion = '3.3.2'
 
 
     // dependencies
@@ -80,7 +80,9 @@ ext {
                             "com.squareup.assertj:assertj-android:${assertjVersion}",
                             "org.robolectric:shadows-multidex:${robolectricVersion}",
                             "com.android.support:recyclerview-v7:${supportLibraryVersion}",
-                            "com.google.dagger:dagger-android-support:${daggerVersion}"
+                            "com.google.dagger:dagger-android-support:${daggerVersion}",
+                            "com.amitshekhar.android:rx2-android-networking:${rx2FastAndroidNetworking}",
+                            "org.robolectric:shadows-support-v4:${robolectricShadowVersion}"
                     ]
             ],
             domain : [

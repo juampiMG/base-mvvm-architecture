@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.jp.app.common.controller.BaseActivity;
 import com.jp.app.common.viewModel.BaseViewModel;
+import com.jp.app.common.viewModel.IBaseViewModel;
 
 import javax.inject.Inject;
 
@@ -30,9 +31,10 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
     @Inject
     protected TCallback mCallback;
 
-    protected BaseViewModel mViewModel;
+    protected IBaseViewModel mViewModel;
     protected TViewDataBinding mViewDataBinding;
-    private View mRootView;
+
+    protected View mRootView;
 
 
     private Unbinder mUnbinder;
@@ -175,7 +177,7 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
         return mFragmentId;
     }
 
-    public abstract BaseViewModel getViewModel() ;
+    public abstract IBaseViewModel getViewModel() ;
 
     public void setViewModel(BaseViewModel viewModel) {
         mViewModel = viewModel;

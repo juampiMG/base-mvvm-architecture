@@ -29,7 +29,7 @@ public class SampleViewModel extends BaseViewModel<ISampleView> implements ISamp
     @Inject
     SampleViewMapper mSampleViewMapper;
 
-    private final MutableLiveData<List<SampleView>> mSampleViewMutableList;
+    protected final MutableLiveData<List<SampleView>> mSampleViewMutableList;
 
     public final ObservableList<SampleView> mSampleViewObservableArrayList = new ObservableArrayList<>();
 

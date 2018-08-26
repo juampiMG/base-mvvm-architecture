@@ -7,15 +7,12 @@ import android.support.v4.app.Fragment;
 import com.jp.app.common.ViewModelProviderFactory;
 import com.jp.app.injector.scope.PerFragment;
 import com.jp.app.ui.sample.viewModel.SampleViewModel;
-import com.jp.app.ui.sample.viewModel.SampleViewModelModule;
 
 import dagger.Binds;
 import dagger.Module;
 
 
-@Module(includes = {
-        SampleViewModelModule.class
-})
+@Module
 public abstract class SampleFragmentModule {
 
     @Binds

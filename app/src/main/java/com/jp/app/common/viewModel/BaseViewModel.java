@@ -3,6 +3,8 @@ package com.jp.app.common.viewModel;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 
+import com.jp.app.common.view.IBaseView;
+
 import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
@@ -10,7 +12,7 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public abstract class BaseViewModel<N> extends ViewModel {
+public abstract class BaseViewModel<N extends IBaseView> extends ViewModel implements IBaseViewModel {
 
     @Inject
     Context mContext;
@@ -33,9 +35,8 @@ public abstract class BaseViewModel<N> extends ViewModel {
         return mCompositeDisposable;
     }
 
-
-    public void setView(N navigator) {
-        this.mWeakReference = new WeakReference<>(navigator);
+    public void setView(IBaseView navigator) {
+        this.mWeakReference = new WeakReference<>((N)navigator);
     }
 
     public N getView() {
