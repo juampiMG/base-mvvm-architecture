@@ -2,8 +2,6 @@ package com.jp.app.ui;
 
 import com.jp.app.BuildConfig;
 import com.jp.app.SampleApplication;
-import com.jp.app.common.controller.BaseActivity;
-import com.jp.app.common.view.BaseFragment;
 
 import org.junit.Rule;
 import org.junit.Test;

@@ -8,19 +8,23 @@ import java.util.List;
 
 public class  ServerMock {
 
+    private static final String ID = "12345";
+    private static final String TITLE = "Sample test";
+    private static final String URL_LOGO = "http//logo";
+
     public static SampleView getSampleView () {
         SampleView sampleView = new SampleView();
-        sampleView.setId("12345");
-        sampleView.setTitle("Sample test");
-        sampleView.setUrlLogo("http//logo");
+        sampleView.setId(ID);
+        sampleView.setTitle(TITLE);
+        sampleView.setUrlLogo(URL_LOGO);
         return sampleView;
     }
 
     public static List<SampleDomain> getListDomain () {
         SampleDomain g1 = new SampleDomain();
-        g1.setId("1234");
-        g1.setTitle("SampleDomain1");
-        g1.setUrlLogo("http//logo1");
+        g1.setId(ID);
+        g1.setTitle(TITLE);
+        g1.setUrlLogo(URL_LOGO);
 
         SampleDomain g2 = new SampleDomain();
         g2.setId("1234");

@@ -35,8 +35,8 @@ public abstract class BaseViewModel<N extends IBaseView> extends ViewModel imple
         return mCompositeDisposable;
     }
 
-    public void setView(IBaseView navigator) {
-        this.mWeakReference = new WeakReference<>((N)navigator);
+    public void setView(IBaseView view) {
+        this.mWeakReference = new WeakReference<>((N) view);
     }
 
     public N getView() {

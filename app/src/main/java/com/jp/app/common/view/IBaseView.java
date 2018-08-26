@@ -1,9 +1,9 @@
 package com.jp.app.common.view;
 
-import com.jp.app.common.controller.BaseActivity;
+import com.jp.app.common.BaseActivity;
 import com.jp.app.common.viewModel.IBaseViewModel;
 
-public interface IBaseView<V extends IBaseViewModel> {
+public interface IBaseView{
 
     void showLoading();
 

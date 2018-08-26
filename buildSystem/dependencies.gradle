@@ -83,6 +83,10 @@ ext {
                             "com.google.dagger:dagger-android-support:${daggerVersion}",
                             "com.amitshekhar.android:rx2-android-networking:${rx2FastAndroidNetworking}",
                             "org.robolectric:shadows-support-v4:${robolectricShadowVersion}"
+                    ],
+                    testAnnotationProcessor : [
+                            "com.google.dagger:dagger-compiler:${daggerVersion}",
+                            "com.google.dagger:dagger-android-processor:${daggerVersion}"
                     ]
             ],
             domain : [

@@ -3,7 +3,7 @@ package com.jp.app.ui.sample;
 import android.os.Bundle;
 
 import com.jp.app.R;
-import com.jp.app.common.controller.BaseActivity;
+import com.jp.app.common.BaseActivity;
 import com.jp.app.model.SampleView;
 import com.jp.app.ui.sample.view.SampleFragment;
 import com.jp.app.utils.NavigationUtils;

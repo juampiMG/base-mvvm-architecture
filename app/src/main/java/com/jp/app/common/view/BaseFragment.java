@@ -14,7 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jp.app.common.controller.BaseActivity;
+import com.jp.app.common.BaseActivity;
 import com.jp.app.common.viewModel.BaseViewModel;
 import com.jp.app.common.viewModel.IBaseViewModel;
 
@@ -22,19 +22,25 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.AndroidSupportInjection;
+import dagger.android.support.HasSupportFragmentInjector;
 
 
-public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCallback extends IBaseFragmentCallback> extends Fragment implements IBaseView {
+public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCallback extends IBaseFragmentCallback> extends Fragment implements HasSupportFragmentInjector, IBaseView {
 
 
     @Inject
     protected TCallback mCallback;
 
-    protected IBaseViewModel mViewModel;
     protected TViewDataBinding mViewDataBinding;
 
+    protected IBaseViewModel mViewModel;
     protected View mRootView;
+
+    @Inject
+    DispatchingAndroidInjector<Fragment> mChildFragmentInjector;
 
 
     private Unbinder mUnbinder;
@@ -67,6 +73,12 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
         }
         super.onAttach(context);
     }
+
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return mChildFragmentInjector;
+    }
+
 
 
     @Override

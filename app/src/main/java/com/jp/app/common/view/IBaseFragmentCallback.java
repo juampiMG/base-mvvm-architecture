@@ -1,6 +1,6 @@
 package com.jp.app.common.view;
 
-import com.jp.app.common.controller.BaseActivity;
+import com.jp.app.common.BaseActivity;
 
 public interface IBaseFragmentCallback {
 
