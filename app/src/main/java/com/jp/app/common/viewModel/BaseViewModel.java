@@ -3,6 +3,7 @@ package com.jp.app.common.viewModel;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 
+import com.jp.app.common.BaseActivity;
 import com.jp.app.common.view.IBaseView;
 
 import java.lang.ref.WeakReference;
@@ -43,6 +44,24 @@ public abstract class BaseViewModel<N extends IBaseView> extends ViewModel imple
         return mWeakReference.get();
     }
 
+    public void showLoading () {
+        if (getView() != null) {
+            getView().showLoading();
+        }
+    }
+
+    public void hideLoading () {
+        if (getView() != null) {
+            getView().hideLoading();
+        }
+    }
+
+    public void showError (String title, String message, BaseActivity.actionOnError actionOnError) {
+        if (getView() != null) {
+            getView().showError(title, message, actionOnError);
+        }
+    }
+    
     public Context getContext () {
         return mContext;
     }
