@@ -1,6 +1,7 @@
 package com.jp.app.common.view;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
@@ -41,6 +42,8 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
 
     @Inject
     DispatchingAndroidInjector<Fragment> mChildFragmentInjector;
+    @Inject
+    protected ViewModelProvider.Factory mViewModelFactory;
 
 
     private Unbinder mUnbinder;

@@ -1,7 +1,6 @@
 package com.jp.app.ui.sample.view;
 
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,12 +16,9 @@ import com.jp.app.common.viewModel.BaseViewModel;
 import com.jp.app.databinding.SampleFragmentBinding;
 import com.jp.app.model.SampleView;
 import com.jp.app.ui.sample.adapter.SampleAdapter;
-import com.jp.app.ui.sample.viewModel.ISampleViewModel;
 import com.jp.app.ui.sample.viewModel.SampleViewModel;
 
 import java.util.ArrayList;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 
@@ -33,9 +29,6 @@ public class SampleFragment extends BaseFragment<SampleFragmentBinding, SampleFr
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
-
-    @Inject
-    ViewModelProvider.Factory mViewModelFactory;
 
     SampleViewModel mSampleViewModel;
 
@@ -103,7 +96,7 @@ public class SampleFragment extends BaseFragment<SampleFragmentBinding, SampleFr
     }
 
     private void subscribeToLiveData() {
-        ((SampleViewModel) mViewModel).getSamples().observe(this, samples -> ((ISampleViewModel) mViewModel).addSamples(samples));
+        mSampleViewModel.getSamples().observe(this, samples -> mSampleViewModel.addSamples(samples));
     }
 }
 
