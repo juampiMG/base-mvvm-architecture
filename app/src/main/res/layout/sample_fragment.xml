@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/black"
-            app:adapter="@{viewModel.mSampleViewObservableArrayList}"
+            app:sample_adapter="@{viewModel.mSampleViewObservableArrayList}"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
