@@ -2,7 +2,6 @@ package com.jp.app.ui.sample.view;
 
 import android.app.Dialog;
 
-import com.jp.app.R;
 import com.jp.app.ui.BaseTest;
 import com.jp.app.ui.sample.SampleActivity;
 import com.jp.app.ui.sample.adapter.SampleAdapter;
@@ -11,14 +10,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowDialog;
-import org.robolectric.shadows.support.v4.SupportFragmentTestUtil;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.robolectric.util.FragmentTestUtil.startFragment;
+import static org.robolectric.shadows.support.v4.SupportFragmentTestUtil.startFragment;
 
 public class SampleViewTest extends BaseTest {
 
@@ -32,7 +30,7 @@ public class SampleViewTest extends BaseTest {
 
         mFragment = (SampleFragment) mActivity.getCurrentFragment();
 
-        SupportFragmentTestUtil.startFragment (mFragment);
+        startFragment (mFragment);
     }
 
 
@@ -54,7 +52,7 @@ public class SampleViewTest extends BaseTest {
 
     @Test
     public void checkAdapterLoadAllData() {
-        assertEquals(3, mFragment.getAdapter().getItemCount());
+        assertEquals(20, mFragment.getAdapter().getItemCount());
     }
 
 
@@ -65,7 +63,7 @@ public class SampleViewTest extends BaseTest {
         mFragment.getAdapter().onBindViewHolder(holder, 0);
 
         assertNotNull(holder);
-        assertEquals("SampleDomain1", holder.title.getText().toString());
+        assertEquals("! Fishy !", holder.title.getText().toString());
 
     }
 
