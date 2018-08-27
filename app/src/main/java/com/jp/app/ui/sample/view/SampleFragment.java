@@ -18,8 +18,6 @@ import com.jp.app.model.SampleView;
 import com.jp.app.ui.sample.adapter.SampleAdapter;
 import com.jp.app.ui.sample.viewModel.SampleViewModel;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
 
 
@@ -72,14 +70,14 @@ public class SampleFragment extends BaseFragment<SampleFragmentBinding, SampleFr
     }
 
     private void callGetSamples() {
-        ((SampleViewModel) mViewModel).callGetSamples();
+        mSampleViewModel.callGetSamples();
     }
 
     private void setUpRecyclerView() {
         mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
         mViewDataBinding.recyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
-        mAdapter = new SampleAdapter(new ArrayList<>(), (SampleViewModel) getViewModel());
+        mAdapter = new SampleAdapter(mSampleViewModel);
         mViewDataBinding.recyclerView.setAdapter(mAdapter);
     }
 
