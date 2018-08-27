@@ -2,7 +2,6 @@ package com.jp.app.ui.sample.view;
 
 import android.app.Dialog;
 
-import com.jp.app.R;
 import com.jp.app.ui.BaseTest;
 import com.jp.app.ui.sample.SampleActivity;
 import com.jp.app.ui.sample.adapter.SampleAdapter;
@@ -15,10 +14,6 @@ import org.robolectric.shadows.support.v4.SupportFragmentTestUtil;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.robolectric.util.FragmentTestUtil.startFragment;
 
 public class SampleViewTest extends BaseTest {
 
@@ -74,7 +69,7 @@ public class SampleViewTest extends BaseTest {
 
         mFragment.mRecyclerView.getChildAt(0).performClick();
         Dialog dialog = ShadowDialog.getLatestDialog();
-        assertThat("The dialog should be displayed", dialog, is(notNullValue()));
+        assertEquals("The dialog should be displayed", dialog.isShowing(),true);
 
         //        Intent expectedIntent = new Intent(mActivity, SampleInfoActivity.class);
 //        ShadowActivity shadowActivity = Shadows.shadowOf(mActivity);
