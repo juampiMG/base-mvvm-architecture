@@ -62,6 +62,11 @@ public class SampleFragment extends BaseFragment<SampleFragmentBinding, SampleFr
     }
 
     @Override
+    public void subscribeToLiveData() {
+        mSampleViewModel.getSamples().observe(this, samples -> mSampleViewModel.addSamples(samples));
+    }
+
+    @Override
     public void onViewLoaded(Bundle savedInstanceState, View view) {
         super.onViewLoaded(savedInstanceState, view);
         setUpRecyclerView();
@@ -91,10 +96,6 @@ public class SampleFragment extends BaseFragment<SampleFragmentBinding, SampleFr
 
     public SampleAdapter getAdapter() {
         return mAdapter;
-    }
-
-    private void subscribeToLiveData() {
-        mSampleViewModel.getSamples().observe(this, samples -> mSampleViewModel.addSamples(samples));
     }
 }
 

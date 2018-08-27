@@ -3,6 +3,7 @@ package com.jp.app.ui.sample.viewModel;
 import com.jp.app.ui.BaseTest;
 import com.jp.app.ui.sample.SampleActivity;
 import com.jp.app.ui.sample.view.SampleFragment;
+import com.jp.data.ServerMock;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -42,8 +43,7 @@ public class SampleViewModelTest extends BaseTest {
 
     @Test
     public void checkLoadSample () {
-        mViewModel.callGetSamples();
-//        assertEquals(mViewModel.mSampleViewMutableList.getValue().get(0), ServerMock.getSampleView());
-        assertEquals(mViewModel.mSampleViewMutableList.getValue().size(), 20);
+        assertEquals(mViewModel.mSampleViewMutableList.getValue().get(0), ServerMock.getSampleView());
+        assertEquals(3, mViewModel.mSampleViewMutableList.getValue().size());
     }
 }

@@ -187,6 +187,8 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
 
     public abstract int getBindingVariable();
 
+    public abstract void subscribeToLiveData();
+
 
     public String getFragmentId() {
         return mFragmentId;

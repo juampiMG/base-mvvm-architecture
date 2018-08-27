@@ -13,9 +13,6 @@ import org.robolectric.shadows.ShadowDialog;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
 import static org.robolectric.shadows.support.v4.SupportFragmentTestUtil.startFragment;
 
 public class SampleViewTest extends BaseTest {
@@ -52,7 +49,7 @@ public class SampleViewTest extends BaseTest {
 
     @Test
     public void checkAdapterLoadAllData() {
-        assertEquals(20, mFragment.getAdapter().getItemCount());
+        assertEquals(3, mFragment.getAdapter().getItemCount());
     }
 
 
@@ -63,7 +60,7 @@ public class SampleViewTest extends BaseTest {
         mFragment.getAdapter().onBindViewHolder(holder, 0);
 
         assertNotNull(holder);
-        assertEquals("! Fishy !", holder.title.getText().toString());
+        assertEquals("Sample test", holder.title.getText().toString());
 
     }
 
@@ -72,7 +69,7 @@ public class SampleViewTest extends BaseTest {
 
         mFragment.mRecyclerView.getChildAt(0).performClick();
         Dialog dialog = ShadowDialog.getLatestDialog();
-        assertThat("The dialog should be displayed", dialog, is(notNullValue()));
+        assertEquals("The dialog should be displayed", dialog.isShowing(),true);
 
         //        Intent expectedIntent = new Intent(mActivity, SampleInfoActivity.class);
 //        ShadowActivity shadowActivity = Shadows.shadowOf(mActivity);
