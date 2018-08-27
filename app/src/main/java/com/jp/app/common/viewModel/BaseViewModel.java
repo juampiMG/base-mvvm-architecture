@@ -13,14 +13,14 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public abstract class BaseViewModel<N extends IBaseView> extends ViewModel implements IBaseViewModel {
+public abstract class BaseViewModel<TBaseView extends IBaseView> extends ViewModel implements IBaseViewModel {
 
     @Inject
     Context mContext;
 
     private CompositeDisposable mCompositeDisposable;
 
-    private WeakReference<N> mWeakReference;
+    private WeakReference<TBaseView> mWeakReference;
 
     public BaseViewModel() {
         this.mCompositeDisposable = new CompositeDisposable();
@@ -32,15 +32,11 @@ public abstract class BaseViewModel<N extends IBaseView> extends ViewModel imple
         super.onCleared();
     }
 
-    public CompositeDisposable getCompositeDisposable() {
-        return mCompositeDisposable;
-    }
-
     public void setView(IBaseView view) {
-        this.mWeakReference = new WeakReference<>((N) view);
+        this.mWeakReference = new WeakReference<>((TBaseView) view);
     }
 
-    public N getView() {
+    public TBaseView getView() {
         return mWeakReference.get();
     }
 
@@ -61,7 +57,7 @@ public abstract class BaseViewModel<N extends IBaseView> extends ViewModel imple
             getView().showError(title, message, actionOnError);
         }
     }
-    
+
     public Context getContext () {
         return mContext;
     }
