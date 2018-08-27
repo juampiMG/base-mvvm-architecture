@@ -60,7 +60,7 @@ public class SampleViewTest extends BaseTest {
         mFragment.getAdapter().onBindViewHolder(holder, 0);
 
         assertNotNull(holder);
-        assertEquals("SampleDomain1", holder.title.getText().toString());
+        assertEquals("Sample test", holder.title.getText().toString());
 
     }
 
