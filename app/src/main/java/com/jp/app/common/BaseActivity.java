@@ -1,4 +1,4 @@
-package com.jp.app.common.controller;
+package com.jp.app.common;
 
 import android.app.AlertDialog;
 import android.os.Bundle;

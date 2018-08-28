@@ -5,7 +5,7 @@ import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 
 import com.jp.app.common.BaseSingleObserver;
-import com.jp.app.common.controller.BaseActivity;
+import com.jp.app.common.BaseActivity;
 import com.jp.app.common.viewModel.BaseViewModel;
 import com.jp.app.model.SampleView;
 import com.jp.app.model.mapper.SampleViewMapper;
@@ -22,14 +22,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class SampleViewModel extends BaseViewModel<ISampleView> implements ISampleViewModel,  SampleAdapter.SampleAdapterCallBack {
+public class SampleViewModel extends BaseViewModel<ISampleView> implements ISampleViewModel, SampleAdapter.SampleAdapterCallBack {
 
     @Inject
     IGetSampleUseCase mGetSampleUseCase;
     @Inject
     SampleViewMapper mSampleViewMapper;
 
-    private final MutableLiveData<List<SampleView>> mSampleViewMutableList;
+    protected final MutableLiveData<List<SampleView>> mSampleViewMutableList;
 
     public final ObservableList<SampleView> mSampleViewObservableArrayList = new ObservableArrayList<>();
 
