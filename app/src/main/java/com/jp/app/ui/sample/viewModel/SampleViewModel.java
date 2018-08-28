@@ -59,7 +59,7 @@ public class SampleViewModel extends BaseViewModel<ISampleView> implements ISamp
 
     @Override
     public void callGetSamples() {
-        getView().showLoading();
+        showLoading();
         mGetSampleUseCase.execute().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseSingleObserver<List<SampleDomain>>(getContext()) {
@@ -71,7 +71,7 @@ public class SampleViewModel extends BaseViewModel<ISampleView> implements ISamp
 
                     @Override
                     public void onSuccess(List<SampleDomain> Sample) {
-                        getView().hideLoading();
+                        hideLoading();
                         if (Sample != null) {
                             mSampleDomain = Sample;
                             mSampleViewMutableList.setValue(mSampleViewMapper.transform(Sample));
@@ -80,8 +80,8 @@ public class SampleViewModel extends BaseViewModel<ISampleView> implements ISamp
 
                     @Override
                     protected void onError(int code, String title, String description) {
-                        getView().hideLoading();
-                        getView().showError(title, description, BaseActivity.actionOnError.CLOSE);
+                        hideLoading();
+                        showError(title, description, BaseActivity.actionOnError.CLOSE);
                     }
                 });
     }

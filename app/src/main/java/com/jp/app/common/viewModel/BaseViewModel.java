@@ -1,8 +1,10 @@
 package com.jp.app.common.viewModel;
 
+import android.app.Application;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 
+import com.jp.app.common.BaseActivity;
 import com.jp.app.common.view.IBaseView;
 
 import java.lang.ref.WeakReference;
@@ -15,7 +17,7 @@ import io.reactivex.disposables.Disposable;
 public abstract class BaseViewModel<N extends IBaseView> extends ViewModel implements IBaseViewModel {
 
     @Inject
-    Context mContext;
+    Application mApplication;
 
     private CompositeDisposable mCompositeDisposable;
 
@@ -44,7 +46,7 @@ public abstract class BaseViewModel<N extends IBaseView> extends ViewModel imple
     }
 
     public Context getContext () {
-        return mContext;
+        return mApplication.getApplicationContext();
     }
 
     public void addDisposable(Disposable disposable) {
@@ -53,4 +55,21 @@ public abstract class BaseViewModel<N extends IBaseView> extends ViewModel imple
         }
     }
 
+    protected void showLoading () {
+        if (getView() != null) {
+            getView().showLoading();
+        }
+    }
+
+    protected void hideLoading () {
+        if (getView() != null) {
+            getView().hideLoading();
+        }
+    }
+
+    protected void showError (String title, String message, BaseActivity.actionOnError actionOnError){
+        if (getView() != null) {
+            getView().showError(title, message, actionOnError);
+        }
+    }
 }
