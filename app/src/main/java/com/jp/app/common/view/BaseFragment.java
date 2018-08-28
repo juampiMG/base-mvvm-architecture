@@ -1,6 +1,7 @@
 package com.jp.app.common.view;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
@@ -14,25 +15,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jp.app.common.controller.BaseActivity;
+import com.jp.app.common.BaseActivity;
 import com.jp.app.common.viewModel.BaseViewModel;
+import com.jp.app.common.viewModel.IBaseViewModel;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.AndroidSupportInjection;
+import dagger.android.support.HasSupportFragmentInjector;
 
 
-public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCallback extends IBaseFragmentCallback> extends Fragment implements IBaseView {
+public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCallback extends IBaseFragmentCallback> extends Fragment implements HasSupportFragmentInjector, IBaseView {
 
 
     @Inject
     protected TCallback mCallback;
 
-    protected BaseViewModel mViewModel;
     protected TViewDataBinding mViewDataBinding;
-    private View mRootView;
+
+    protected IBaseViewModel mViewModel;
+    protected View mRootView;
+
+    @Inject
+    DispatchingAndroidInjector<Fragment> mChildFragmentInjector;
+    @Inject
+    protected ViewModelProvider.Factory mViewModelFactory;
 
 
     private Unbinder mUnbinder;
@@ -65,6 +76,12 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
         }
         super.onAttach(context);
     }
+
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return mChildFragmentInjector;
+    }
+
 
 
     @Override
@@ -175,7 +192,7 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
         return mFragmentId;
     }
 
-    public abstract BaseViewModel getViewModel() ;
+    public abstract IBaseViewModel getViewModel() ;
 
     public void setViewModel(BaseViewModel viewModel) {
         mViewModel = viewModel;

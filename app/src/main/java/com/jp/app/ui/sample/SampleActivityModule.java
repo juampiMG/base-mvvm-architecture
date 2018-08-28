@@ -2,7 +2,7 @@ package com.jp.app.ui.sample;
 
 import android.app.Activity;
 
-import com.jp.app.common.controller.BaseActivityModule;
+import com.jp.app.common.BaseActivityModule;
 import com.jp.app.injector.scope.PerActivity;
 import com.jp.app.injector.scope.PerFragment;
 import com.jp.app.ui.sample.view.SampleFragment;

@@ -14,6 +14,7 @@ import com.jp.app.model.SampleView;
 import com.jp.app.utils.ImageHelper;
 import com.jp.app.utils.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,8 +31,8 @@ public class SampleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         void sampleClicked(int adapterPosition);
     }
 
-    public SampleAdapter(List<SampleView> samples, SampleAdapterCallBack callBack) {
-        mList = samples;
+    public SampleAdapter(SampleAdapterCallBack callBack) {
+        mList = new ArrayList<>();
         mListener = callBack;
     }
 

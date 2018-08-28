@@ -1,14 +1,13 @@
-package com.jp.app.common.controller;
+package com.jp.app.common;
 
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 
+import com.jp.app.common.BaseActivity;
 import com.jp.app.injector.scope.PerActivity;
 
-import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 

@@ -3,18 +3,19 @@ package com.jp.app.injector.module;
 
 import com.jp.data.remote.IRestServices;
 import com.jp.data.remote.RestServices;
+import com.jp.data.repository.SampleRepository;
+import com.jp.domain.repository.ISampleRepository;
 
 import javax.inject.Singleton;
 
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class NetworkModule {
+public abstract class NetworkModule {
 
-    @Provides
+    @Binds
     @Singleton
-    IRestServices restServices() {
-        return new RestServices();
-    }
+    abstract IRestServices restServices(RestServices restServices);
 }

@@ -1,7 +1,11 @@
 package com.jp.app.common.viewModel;
 
+import android.app.Application;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
+
+import com.jp.app.common.BaseActivity;
+import com.jp.app.common.view.IBaseView;
 
 import java.lang.ref.WeakReference;
 
@@ -10,10 +14,10 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public abstract class BaseViewModel<N> extends ViewModel {
+public abstract class BaseViewModel<N extends IBaseView> extends ViewModel implements IBaseViewModel {
 
     @Inject
-    Context mContext;
+    Application mApplication;
 
     private CompositeDisposable mCompositeDisposable;
 
@@ -33,9 +37,8 @@ public abstract class BaseViewModel<N> extends ViewModel {
         return mCompositeDisposable;
     }
 
-
-    public void setView(N navigator) {
-        this.mWeakReference = new WeakReference<>(navigator);
+    public void setView(IBaseView view) {
+        this.mWeakReference = new WeakReference<>((N) view);
     }
 
     public N getView() {
@@ -43,7 +46,7 @@ public abstract class BaseViewModel<N> extends ViewModel {
     }
 
     public Context getContext () {
-        return mContext;
+        return mApplication.getApplicationContext();
     }
 
     public void addDisposable(Disposable disposable) {
@@ -52,4 +55,21 @@ public abstract class BaseViewModel<N> extends ViewModel {
         }
     }
 
+    protected void showLoading () {
+        if (getView() != null) {
+            getView().showLoading();
+        }
+    }
+
+    protected void hideLoading () {
+        if (getView() != null) {
+            getView().hideLoading();
+        }
+    }
+
+    protected void showError (String title, String message, BaseActivity.actionOnError actionOnError){
+        if (getView() != null) {
+            getView().showError(title, message, actionOnError);
+        }
+    }
 }
