@@ -4,8 +4,8 @@ import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 
-import com.jp.app.common.BaseSingleObserver;
 import com.jp.app.common.BaseActivity;
+import com.jp.app.common.BaseSingleObserver;
 import com.jp.app.common.viewModel.BaseViewModel;
 import com.jp.app.model.SampleView;
 import com.jp.app.model.mapper.SampleViewMapper;
@@ -59,10 +59,10 @@ public class SampleViewModel extends BaseViewModel<ISampleView> implements ISamp
 
     @Override
     public void callGetSamples() {
-        showLoading();
+        setIsLoading(true);
         mGetSampleUseCase.execute().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseSingleObserver<List<SampleDomain>>(getContext()) {
+                .subscribe(new BaseSingleObserver<List<SampleDomain>>(this) {
 
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -71,7 +71,7 @@ public class SampleViewModel extends BaseViewModel<ISampleView> implements ISamp
 
                     @Override
                     public void onSuccess(List<SampleDomain> Sample) {
-                        hideLoading();
+                        setIsLoading(false);
                         if (Sample != null) {
                             mSampleDomain = Sample;
                             mSampleViewMutableList.setValue(mSampleViewMapper.transform(Sample));
@@ -80,7 +80,7 @@ public class SampleViewModel extends BaseViewModel<ISampleView> implements ISamp
 
                     @Override
                     protected void onError(int code, String title, String description) {
-                        hideLoading();
+                        setIsLoading(false);
                         showError(title, description, BaseActivity.actionOnError.CLOSE);
                     }
                 });

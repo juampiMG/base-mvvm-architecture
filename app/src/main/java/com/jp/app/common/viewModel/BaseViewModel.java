@@ -3,6 +3,7 @@ package com.jp.app.common.viewModel;
 import android.app.Application;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
+import android.databinding.ObservableBoolean;
 
 import com.jp.app.common.BaseActivity;
 import com.jp.app.common.view.IBaseView;
@@ -14,14 +15,16 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public abstract class BaseViewModel<N extends IBaseView> extends ViewModel implements IBaseViewModel {
+public abstract class BaseViewModel<TBaseView extends IBaseView> extends ViewModel implements IBaseViewModel {
 
     @Inject
     Application mApplication;
 
+    private final ObservableBoolean mIsLoading = new ObservableBoolean(false);
+
     private CompositeDisposable mCompositeDisposable;
 
-    private WeakReference<N> mWeakReference;
+    private WeakReference<TBaseView> mWeakReference;
 
     public BaseViewModel() {
         this.mCompositeDisposable = new CompositeDisposable();
@@ -33,37 +36,30 @@ public abstract class BaseViewModel<N extends IBaseView> extends ViewModel imple
         super.onCleared();
     }
 
-    public CompositeDisposable getCompositeDisposable() {
-        return mCompositeDisposable;
-    }
-
-    public void setView(IBaseView view) {
-        this.mWeakReference = new WeakReference<>((N) view);
-    }
-
-    public N getView() {
-        return mWeakReference.get();
-    }
-
     public Context getContext () {
         return mApplication.getApplicationContext();
     }
 
+    public void setView(IBaseView view) {
+        this.mWeakReference = new WeakReference<>((TBaseView) view);
+    }
+
+    public TBaseView getView() {
+        return mWeakReference.get();
+    }
+
+    public ObservableBoolean getIsLoading () {
+        return mIsLoading;
+    }
+
+    public void setIsLoading(boolean visibility) {
+        mIsLoading.set(visibility);
+    }
+
+
     public void addDisposable(Disposable disposable) {
         if (disposable != null && mCompositeDisposable != null) {
             mCompositeDisposable.add(disposable);
-        }
-    }
-
-    protected void showLoading () {
-        if (getView() != null) {
-            getView().showLoading();
-        }
-    }
-
-    protected void hideLoading () {
-        if (getView() != null) {
-            getView().hideLoading();
         }
     }
 

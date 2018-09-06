@@ -5,6 +5,7 @@ ext {
     servicesVersion = '11.4.2'
     multidexVersion = '1.0.1'
     lifecycleVersion = '1.1.0'
+    dataBindingVersion = '2.3.3'
 
     // Libraries
     reactiveAndroidVersion = '2.0.1'        // https://github.com/ReactiveX/RxAndroid
@@ -67,7 +68,8 @@ ext {
                             "org.parceler:parceler:${parcelerVersion}",
                             "com.github.bumptech.glide:compiler:${glideVersion}",
                             "com.google.dagger:dagger-compiler:${daggerVersion}",
-                            "com.google.dagger:dagger-android-processor:${daggerVersion}"
+                            "com.google.dagger:dagger-android-processor:${daggerVersion}",
+                            "com.android.databinding:compiler:${dataBindingVersion}"
                     ],
                     compileOnly : [
                             "org.projectlombok:lombok:${lombokVersion}"

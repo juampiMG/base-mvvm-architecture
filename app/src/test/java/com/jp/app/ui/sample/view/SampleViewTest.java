@@ -10,10 +10,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowDialog;
-import org.robolectric.shadows.support.v4.SupportFragmentTestUtil;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static org.robolectric.shadows.support.v4.SupportFragmentTestUtil.startFragment;
 
 public class SampleViewTest extends BaseTest {
 
@@ -27,7 +27,7 @@ public class SampleViewTest extends BaseTest {
 
         mFragment = (SampleFragment) mActivity.getCurrentFragment();
 
-        SupportFragmentTestUtil.startFragment (mFragment);
+        startFragment (mFragment);
     }
 
 
