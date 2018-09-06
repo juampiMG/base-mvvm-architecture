@@ -25,6 +25,7 @@ public abstract class SampleActivityModule {
     @PerActivity
     abstract SampleFragment.FragmentCallback fragmentCallback(SampleActivity activity);
 
+
     @PerFragment
     @ContributesAndroidInjector(modules = SampleFragmentModule.class)
     abstract SampleFragment fragmentInjector();

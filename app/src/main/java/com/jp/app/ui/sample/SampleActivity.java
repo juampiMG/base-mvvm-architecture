@@ -4,13 +4,20 @@ import android.os.Bundle;
 
 import com.jp.app.R;
 import com.jp.app.common.BaseActivity;
+import com.jp.app.databinding.SampleActivityBinding;
 import com.jp.app.model.SampleView;
 import com.jp.app.ui.sample.view.SampleFragment;
+import com.jp.app.ui.sample.viewModel.SampleViewModel;
 import com.jp.app.utils.NavigationUtils;
 
-public class SampleActivity extends BaseActivity implements SampleFragment.FragmentCallback {
+import javax.inject.Inject;
+
+public class SampleActivity extends BaseActivity<SampleActivityBinding, SampleViewModel> implements SampleFragment.FragmentCallback {
 
     public static final int LAYOUT_ID = R.layout.sample_activity;
+
+    @Inject
+    SampleViewModel mViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,9 +36,15 @@ public class SampleActivity extends BaseActivity implements SampleFragment.Fragm
     }
 
     @Override
+    public SampleViewModel getViewModel() {
+        return mViewModel;
+    }
+
+    @Override
     public void loadSampleInfo(SampleView sample) {
         NavigationUtils.navigationToSampleInfoActivity(this, sample);
         showMessage(getString(R.string.information), String.format(getString(R.string.message_on_click), sample.getTitle()));
     }
+
 
 }

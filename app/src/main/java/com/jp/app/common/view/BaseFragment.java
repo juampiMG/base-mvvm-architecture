@@ -163,20 +163,6 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
     }
 
     @Override
-    public void showLoading() {
-        if (mCallback != null) {
-            mCallback.showLoading();
-        }
-    }
-
-    @Override
-    public void hideLoading() {
-        if (mCallback != null) {
-            mCallback.hideLoading();
-        }
-    }
-
-    @Override
     public void showError(String title, String message, BaseActivity.actionOnError actionOnError) {
         mCallback.showError(title, message, actionOnError);
     }

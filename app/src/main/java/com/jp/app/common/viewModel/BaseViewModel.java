@@ -1,7 +1,9 @@
 package com.jp.app.common.viewModel;
 
+import android.app.Application;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
+import android.databinding.ObservableBoolean;
 
 import com.jp.app.common.BaseActivity;
 import com.jp.app.common.view.IBaseView;
@@ -16,7 +18,9 @@ import io.reactivex.disposables.Disposable;
 public abstract class BaseViewModel<TBaseView extends IBaseView> extends ViewModel implements IBaseViewModel {
 
     @Inject
-    Context mContext;
+    Application mApplication;
+
+    private final ObservableBoolean mIsLoading = new ObservableBoolean(false);
 
     private CompositeDisposable mCompositeDisposable;
 
@@ -32,6 +36,10 @@ public abstract class BaseViewModel<TBaseView extends IBaseView> extends ViewMod
         super.onCleared();
     }
 
+    public Context getContext () {
+        return mApplication.getApplicationContext();
+    }
+
     public void setView(IBaseView view) {
         this.mWeakReference = new WeakReference<>((TBaseView) view);
     }
@@ -40,26 +48,18 @@ public abstract class BaseViewModel<TBaseView extends IBaseView> extends ViewMod
         return mWeakReference.get();
     }
 
-    public void showLoading () {
-        if (getView() != null) {
-            getView().showLoading();
-        }
+    public ObservableBoolean getIsLoading () {
+        return mIsLoading;
     }
 
-    public void hideLoading () {
-        if (getView() != null) {
-            getView().hideLoading();
-        }
+    public void setIsLoading(boolean visibility) {
+        mIsLoading.set(visibility);
     }
 
     public void showError (String title, String message, BaseActivity.actionOnError actionOnError) {
         if (getView() != null) {
             getView().showError(title, message, actionOnError);
         }
-    }
-
-    public Context getContext () {
-        return mContext;
     }
 
     public void addDisposable(Disposable disposable) {

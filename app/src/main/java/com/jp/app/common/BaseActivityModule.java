@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 
-import com.jp.app.common.BaseActivity;
 import com.jp.app.injector.scope.PerActivity;
 
 import dagger.Module;

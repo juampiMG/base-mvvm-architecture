@@ -1,23 +1,23 @@
 package com.jp.app.common;
 
 import android.app.AlertDialog;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.jp.app.BR;
 import com.jp.app.R;
 import com.jp.app.common.view.IBaseFragmentCallback;
+import com.jp.app.common.viewModel.BaseViewModel;
 import com.jp.app.ui.sample.SampleActivity;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.AndroidInjection;
@@ -27,7 +27,11 @@ import dagger.android.support.HasSupportFragmentInjector;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public abstract class BaseActivity extends AppCompatActivity implements HasSupportFragmentInjector, IBaseFragmentCallback {
+/**
+ * TBaseViewModel is the reference to the ViewModel, if the activity has not reference to any, add BaseActivityViewModel instead
+ */
+
+public abstract class BaseActivity<TViewDataBinding extends ViewDataBinding, TBaseViewModel extends BaseViewModel> extends AppCompatActivity implements HasSupportFragmentInjector, IBaseFragmentCallback {
 
     private static final int DEFAULT_NUM_COUNT_BACK = 1;
 
@@ -42,9 +46,9 @@ public abstract class BaseActivity extends AppCompatActivity implements HasSuppo
     @Inject
     DispatchingAndroidInjector<Fragment> mFragmentInjector;
 
-    @Nullable
-    @BindView(R.id.generic_loading)
-    RelativeLayout loadingView;
+
+    protected TViewDataBinding mViewDataBinding;
+    protected TBaseViewModel mViewModel;
 
     private Unbinder unbinder;
     private CompositeDisposable compositeDisposable;
@@ -61,6 +65,8 @@ public abstract class BaseActivity extends AppCompatActivity implements HasSuppo
         }
     };
 
+    // =============== HasFragmentInjector =========================================================
+
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
         return mFragmentInjector;
@@ -69,26 +75,16 @@ public abstract class BaseActivity extends AppCompatActivity implements HasSuppo
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
-
-
         super.onCreate(savedInstanceState);
 
+        AndroidInjection.inject(this);
         layoutId = getLayoutId();
-
         setContentView(layoutId);
-
         unbinder = ButterKnife.bind(this);
-
-        if (defaultCountBackToExit == 0) {
-            defaultCountBackToExit = DEFAULT_NUM_COUNT_BACK;
-        }
-        countBackToExit = defaultCountBackToExit;
+        setUpBackPressValues();
+        performDataBinding();
 
     }
-
-    // =============== HasFragmentInjector =========================================================
-
 
     protected void onDestroy() {
         super.onDestroy();
@@ -98,10 +94,49 @@ public abstract class BaseActivity extends AppCompatActivity implements HasSuppo
         }
     }
 
+    // =============== Load View and Binding =======================================================
+
+    protected abstract int getLayoutId();
+
+    public int getBindingVariable() {
+        return BR.viewModel;
+    }
+
+    /**
+     * If the Activity has not interactions with views just return BaseActivityViewModel, if not
+     * return the reference to the new ViewModel.
+     * No forget to add the new ViewModel to Dagger as is done with the BaseActivityViewModel
+     */
+
+    public abstract TBaseViewModel getViewModel();
+
+    public TViewDataBinding getViewDataBinding() {
+        return mViewDataBinding;
+    }
+
+    private void performDataBinding() {
+        mViewDataBinding = DataBindingUtil.setContentView(this, getLayoutId());
+        this.mViewModel = mViewModel == null ? getViewModel() : mViewModel;
+        mViewDataBinding.setVariable(getBindingVariable(), mViewModel);
+        mViewDataBinding.executePendingBindings();
+    }
+
+    public Fragment getCurrentFragment() {
+        return currentFragment;
+    }
+
+    // =============== Manage BackPress ============================================================
+
     @Override
     public void onBackPressed() {
         manageBackPressed();
+    }
 
+    private void setUpBackPressValues() {
+        if (defaultCountBackToExit == 0) {
+            defaultCountBackToExit = DEFAULT_NUM_COUNT_BACK;
+        }
+        countBackToExit = defaultCountBackToExit;
     }
 
     protected void manageBackPressed() {
@@ -130,10 +165,6 @@ public abstract class BaseActivity extends AppCompatActivity implements HasSuppo
 
     }
 
-    public Fragment getCurrentFragment() {
-        return currentFragment;
-    }
-
     private void removeCallbacks() {
         if (handler != null) {
             handler.removeCallbacks(restartCountBackToExit);
@@ -151,30 +182,7 @@ public abstract class BaseActivity extends AppCompatActivity implements HasSuppo
     }
 
 
-    @Override
-    public void showError(String title, String message, actionOnError action) {
-        showErrorDialog(title, message, action);
-    }
-
-    @Override
-    public void showMessage(String title, String message) {
-        showMessageDialog(title, message);
-    }
-
-
-    @Override
-    public void showLoading() {
-        if (loadingView != null) {
-            loadingView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void hideLoading() {
-        if (loadingView != null) {
-            loadingView.setVisibility(View.GONE);
-        }
-    }
+    // =============== Manage Disposable ===========================================================
 
     public CompositeDisposable getCompositeDisposable() {
         if (compositeDisposable == null || compositeDisposable.isDisposed())
@@ -213,12 +221,24 @@ public abstract class BaseActivity extends AppCompatActivity implements HasSuppo
         }
     }
 
+    // =============== ShowDialogs =================================================================
+
+    @Override
+    public void showError(String title, String message, actionOnError action) {
+        showErrorDialog(title, message, action);
+    }
+
+    @Override
+    public void showMessage(String title, String message) {
+        showMessageDialog(title, message);
+    }
+
     private void showErrorDialog(String title, String message, final actionOnError action) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(message)
                 .setTitle(title);
         builder.setPositiveButton(R.string.accept, (dialog, which) -> {
-            if (action == actionOnError.CLOSE){
+            if (action == actionOnError.CLOSE) {
                 finish();
             }
             dialog.dismiss();
@@ -237,6 +257,4 @@ public abstract class BaseActivity extends AppCompatActivity implements HasSuppo
 
         builder.create().show();
     }
-
-    protected abstract int getLayoutId();
 }
