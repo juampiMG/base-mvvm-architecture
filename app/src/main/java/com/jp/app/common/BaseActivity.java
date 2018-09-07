@@ -1,8 +1,6 @@
 package com.jp.app.common;
 
 import android.app.AlertDialog;
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -10,10 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.jp.app.BR;
 import com.jp.app.R;
 import com.jp.app.common.view.IBaseFragmentCallback;
-import com.jp.app.common.viewModel.BaseViewModel;
 import com.jp.app.ui.sample.SampleActivity;
 
 import javax.inject.Inject;
@@ -27,17 +23,13 @@ import dagger.android.support.HasSupportFragmentInjector;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-/**
- * TBaseViewModel is the reference to the ViewModel, if the activity has not reference to any, add BaseActivityViewModel instead
- */
-
-public abstract class BaseActivity<TViewDataBinding extends ViewDataBinding, TBaseViewModel extends BaseViewModel> extends AppCompatActivity implements HasSupportFragmentInjector, IBaseFragmentCallback {
+public abstract class BaseActivity extends AppCompatActivity implements HasSupportFragmentInjector, IBaseFragmentCallback {
 
     private static final int DEFAULT_NUM_COUNT_BACK = 1;
 
-    protected int layoutId;
+    protected int mLayoutId;
 
-    protected Fragment currentFragment;
+    protected Fragment mCurrentFragment;
 
     public enum actionOnError {
         CLOSE, NOTHING
@@ -46,24 +38,13 @@ public abstract class BaseActivity<TViewDataBinding extends ViewDataBinding, TBa
     @Inject
     DispatchingAndroidInjector<Fragment> mFragmentInjector;
 
+    private Unbinder mUnBinder;
+    private CompositeDisposable mCompositeDisposable;
+    private Handler mHandler = new Handler();
+    private Toast mExitToast;
 
-    protected TViewDataBinding mViewDataBinding;
-    protected TBaseViewModel mViewModel;
-
-    private Unbinder unbinder;
-    private CompositeDisposable compositeDisposable;
-
-
-    private Toast exitToast;
-    private int defaultCountBackToExit;
-    private int countBackToExit;
-
-    private Handler handler = new Handler();
-    private Runnable restartCountBackToExit = new Runnable() {
-        public void run() {
-            countBackToExit = defaultCountBackToExit;
-        }
-    };
+    private int mDefaultCountBackToExit;
+    private int mCountBackToExit;
 
     // =============== HasFragmentInjector =========================================================
 
@@ -76,53 +57,30 @@ public abstract class BaseActivity<TViewDataBinding extends ViewDataBinding, TBa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mLayoutId = getLayoutId();
+        setContentView(mLayoutId);
 
         AndroidInjection.inject(this);
-        layoutId = getLayoutId();
-        setContentView(layoutId);
-        unbinder = ButterKnife.bind(this);
+        mUnBinder = ButterKnife.bind(this);
+
         setUpBackPressValues();
-        performDataBinding();
 
     }
 
     protected void onDestroy() {
         super.onDestroy();
-        if (unbinder != null) {
-            unbinder.unbind();
+        if (mUnBinder != null) {
+            mUnBinder.unbind();
             removeAllDisposables();
         }
     }
 
-    // =============== Load View and Binding =======================================================
+    // =============== Manage Views ================================================================
 
     protected abstract int getLayoutId();
 
-    public int getBindingVariable() {
-        return BR.viewModel;
-    }
-
-    /**
-     * If the Activity has not interactions with views just return BaseActivityViewModel, if not
-     * return the reference to the new ViewModel.
-     * No forget to add the new ViewModel to Dagger as is done with the BaseActivityViewModel
-     */
-
-    public abstract TBaseViewModel getViewModel();
-
-    public TViewDataBinding getViewDataBinding() {
-        return mViewDataBinding;
-    }
-
-    private void performDataBinding() {
-        mViewDataBinding = DataBindingUtil.setContentView(this, getLayoutId());
-        this.mViewModel = mViewModel == null ? getViewModel() : mViewModel;
-        mViewDataBinding.setVariable(getBindingVariable(), mViewModel);
-        mViewDataBinding.executePendingBindings();
-    }
-
     public Fragment getCurrentFragment() {
-        return currentFragment;
+        return mCurrentFragment;
     }
 
     // =============== Manage BackPress ============================================================
@@ -133,41 +91,45 @@ public abstract class BaseActivity<TViewDataBinding extends ViewDataBinding, TBa
     }
 
     private void setUpBackPressValues() {
-        if (defaultCountBackToExit == 0) {
-            defaultCountBackToExit = DEFAULT_NUM_COUNT_BACK;
+        if (mDefaultCountBackToExit == 0) {
+            mDefaultCountBackToExit = DEFAULT_NUM_COUNT_BACK;
         }
-        countBackToExit = defaultCountBackToExit;
+        mCountBackToExit = mDefaultCountBackToExit;
     }
+
+    private Runnable mRestartCountBackToExit = new Runnable() {
+        public void run() {
+            mCountBackToExit = mDefaultCountBackToExit;
+        }
+    };
 
     protected void manageBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             super.onBackPressed();
         }
         if (this instanceof SampleActivity) {
-            if (exitToast == null) {
-                exitToast = Toast.makeText(this, getString(R.string.count_back_exit_message), Toast.LENGTH_SHORT);
+            if (mExitToast == null) {
+                mExitToast = Toast.makeText(this, getString(R.string.count_back_exit_message), Toast.LENGTH_SHORT);
             }
-            if (countBackToExit > 0) {
-                countBackToExit--;
+            if (mCountBackToExit > 0) {
+                mCountBackToExit--;
                 removeCallbacks();
-                handler.postDelayed(restartCountBackToExit, 2000);
-                exitToast.show();
+                mHandler.postDelayed(mRestartCountBackToExit, 2000);
+                mExitToast.show();
                 getFragmentManager().popBackStack();
             } else {
-                exitToast.cancel();
+                mExitToast.cancel();
                 super.onBackPressed();
             }
 
         } else {
             super.onBackPressed();
         }
-
-
     }
 
     private void removeCallbacks() {
-        if (handler != null) {
-            handler.removeCallbacks(restartCountBackToExit);
+        if (mHandler != null) {
+            mHandler.removeCallbacks(mRestartCountBackToExit);
         }
     }
 
@@ -185,14 +147,14 @@ public abstract class BaseActivity<TViewDataBinding extends ViewDataBinding, TBa
     // =============== Manage Disposable ===========================================================
 
     public CompositeDisposable getCompositeDisposable() {
-        if (compositeDisposable == null || compositeDisposable.isDisposed())
-            compositeDisposable = new CompositeDisposable();
-        return compositeDisposable;
+        if (mCompositeDisposable == null || mCompositeDisposable.isDisposed())
+            mCompositeDisposable = new CompositeDisposable();
+        return mCompositeDisposable;
     }
 
     public void addDisposable(Disposable disposable) {
-        if (disposable != null && compositeDisposable != null) {
-            compositeDisposable.add(disposable);
+        if (disposable != null && mCompositeDisposable != null) {
+            mCompositeDisposable.add(disposable);
         }
     }
 
@@ -201,21 +163,21 @@ public abstract class BaseActivity<TViewDataBinding extends ViewDataBinding, TBa
             if (!disposable.isDisposed()) {
                 disposable.dispose();
             }
-            if (compositeDisposable != null) {
-                compositeDisposable.remove(disposable);
+            if (mCompositeDisposable != null) {
+                mCompositeDisposable.remove(disposable);
             }
         }
     }
 
     public void removeAllDisposables() {
-        if (compositeDisposable != null) {
-            compositeDisposable.clear();
+        if (mCompositeDisposable != null) {
+            mCompositeDisposable.clear();
         }
     }
 
     public boolean hasDisposables() {
-        if (compositeDisposable != null) {
-            return compositeDisposable.size() > 0;
+        if (mCompositeDisposable != null) {
+            return mCompositeDisposable.size() > 0;
         } else {
             return false;
         }

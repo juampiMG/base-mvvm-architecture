@@ -4,40 +4,28 @@ import android.os.Bundle;
 
 import com.jp.app.R;
 import com.jp.app.common.BaseActivity;
-import com.jp.app.databinding.SampleActivityBinding;
 import com.jp.app.model.SampleView;
 import com.jp.app.ui.sample.view.SampleFragment;
-import com.jp.app.ui.sample.viewModel.SampleViewModel;
 import com.jp.app.utils.NavigationUtils;
 
-import javax.inject.Inject;
-
-public class SampleActivity extends BaseActivity<SampleActivityBinding, SampleViewModel> implements SampleFragment.FragmentCallback {
+public class SampleActivity extends BaseActivity implements SampleFragment.FragmentCallback {
 
     public static final int LAYOUT_ID = R.layout.sample_activity;
-
-    @Inject
-    SampleViewModel mViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            currentFragment = SampleFragment.newInstance(new Bundle());
-            NavigationUtils.navigateToFragment(this, this.getSupportFragmentManager(), currentFragment, R.id.content, false);
+            mCurrentFragment = SampleFragment.newInstance(new Bundle());
+            NavigationUtils.navigateToFragment(this, this.getSupportFragmentManager(), mCurrentFragment, R.id.content, false);
         } else {
-            currentFragment = getSupportFragmentManager().findFragmentById(R.id.content);
+            mCurrentFragment = getSupportFragmentManager().findFragmentById(R.id.content);
         }
     }
 
     @Override
     protected int getLayoutId() {
         return LAYOUT_ID;
-    }
-
-    @Override
-    public SampleViewModel getViewModel() {
-        return mViewModel;
     }
 
     @Override
