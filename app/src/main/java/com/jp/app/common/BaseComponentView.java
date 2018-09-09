@@ -52,7 +52,8 @@ public abstract class BaseComponentView extends FrameLayout {
         }
     }
 
-    protected void bindViews() {}
+    protected void bindViews() {
+    }
 
     protected abstract void loadAttributes(Context context, AttributeSet attrs);
 

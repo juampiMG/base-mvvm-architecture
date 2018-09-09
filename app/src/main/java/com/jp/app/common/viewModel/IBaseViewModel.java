@@ -9,7 +9,7 @@ public interface IBaseViewModel {
 
     void setView(IBaseView view);
 
-    LiveData<Boolean> getIsLoading ();
+    LiveData<Boolean> getIsLoading();
 
     LiveData<ShowErrorMessage> showErrorMessage();
 

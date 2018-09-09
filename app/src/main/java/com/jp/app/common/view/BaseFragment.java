@@ -83,7 +83,6 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
     }
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,40 +155,35 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         if (mUnbinder != null) {
             mUnbinder.unbind();
         }
-    }
-
-    @Override
-    public void showError(String title, String message, BaseActivity.actionOnError actionOnError) {
-        mCallback.showError(title, message, actionOnError);
     }
 
     public abstract
     @LayoutRes
     int getLayoutId();
 
-    public void subscribeToLiveData(){
-        loadingSubscribe ();
+    public void subscribeToLiveData() {
+        loadingSubscribe();
         errorMessageSubscribe();
     }
 
-    private void loadingSubscribe (){
+    private void loadingSubscribe() {
         getViewModel().getIsLoading().observe(this, isLoading -> {
             if (isLoading != null && isLoading) {
-                mCallback.showLoading();
+                if (mCallback != null) mCallback.showLoading();
             } else {
-                mCallback.hideLoading();
+                if (mCallback != null) mCallback.hideLoading();
             }
         });
     }
 
-    private void errorMessageSubscribe () {
+    private void errorMessageSubscribe() {
         getViewModel().showErrorMessage().observe(this, showErrorMessage -> {
             if (showErrorMessage != null) {
-                mCallback.showError(showErrorMessage.getTitle(), showErrorMessage.getMessage(), showErrorMessage.getActionOnError());
+                if (mCallback != null)
+                    mCallback.showError(showErrorMessage.getTitle(), showErrorMessage.getMessage(), showErrorMessage.getActionOnError());
             }
         });
     }
@@ -206,7 +200,7 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
         return mFragmentId;
     }
 
-    public abstract IBaseViewModel getViewModel() ;
+    public abstract IBaseViewModel getViewModel();
 
     public abstract int getBindingVariable();
 
