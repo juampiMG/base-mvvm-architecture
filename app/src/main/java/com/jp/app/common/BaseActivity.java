@@ -193,11 +193,11 @@ public abstract class BaseActivity extends AppCompatActivity implements HasSuppo
 
     // =============== Generic Loading =============================================================
 
-    public void showLoading (){
+    public void showLoading() {
         if (mGenericLoading != null) mGenericLoading.setVisibility(View.VISIBLE);
     }
 
-    public void hideLoading (){
+    public void hideLoading() {
         if (mGenericLoading != null) mGenericLoading.setVisibility(View.GONE);
     }
 

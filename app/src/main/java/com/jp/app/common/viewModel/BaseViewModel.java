@@ -34,7 +34,7 @@ public abstract class BaseViewModel<TBaseView extends IBaseView> extends ViewMod
         this.mCompositeDisposable = new CompositeDisposable();
     }
 
-    public Context getContext () {
+    public Context getContext() {
         return mApplication.getApplicationContext();
     }
 
@@ -46,13 +46,13 @@ public abstract class BaseViewModel<TBaseView extends IBaseView> extends ViewMod
     }
 
     @Override
-    public LiveData<Boolean> getIsLoading () {
+    public LiveData<Boolean> getIsLoading() {
         return mIsLoading;
     }
 
     @Override
     public LiveData<ShowErrorMessage> showErrorMessage() {
-        return mShowMessage ;
+        return mShowMessage;
     }
 
     // =============== CompositeDispoable ==========================================================
@@ -77,12 +77,12 @@ public abstract class BaseViewModel<TBaseView extends IBaseView> extends ViewMod
         mIsLoading.setValue(visibility);
     }
 
-    public void showErrorMessage (String title, String message, BaseActivity.actionOnError actionOnError) {
+    public void showErrorMessage(String title, String message, BaseActivity.actionOnError actionOnError) {
         ShowErrorMessage showMessage = new ShowErrorMessage();
-        showMessage.setTitle (title);
-        showMessage.setMessage (message);
-        showMessage.setActionOnError (actionOnError);
-       mShowMessage.setValue(showMessage);
+        showMessage.setTitle(title);
+        showMessage.setMessage(message);
+        showMessage.setActionOnError(actionOnError);
+        mShowMessage.setValue(showMessage);
     }
 
 }

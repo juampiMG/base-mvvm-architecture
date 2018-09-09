@@ -4,9 +4,9 @@ import com.jp.app.common.BaseActivity;
 
 public interface IBaseFragmentCallback {
 
-    void showLoading ();
+    void showLoading();
 
-    void hideLoading ();
+    void hideLoading();
 
     void showError(String title, String message, BaseActivity.actionOnError action);
 
