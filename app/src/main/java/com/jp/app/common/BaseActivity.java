@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.jp.app.R;
@@ -14,12 +16,14 @@ import com.jp.app.ui.sample.SampleActivity;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
+import io.reactivex.annotations.Nullable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -37,6 +41,10 @@ public abstract class BaseActivity extends AppCompatActivity implements HasSuppo
 
     @Inject
     DispatchingAndroidInjector<Fragment> mFragmentInjector;
+
+    @Nullable
+    @BindView(R.id.generic_loading)
+    RelativeLayout mGenericLoading;
 
     private Unbinder mUnBinder;
     private CompositeDisposable mCompositeDisposable;
@@ -181,6 +189,16 @@ public abstract class BaseActivity extends AppCompatActivity implements HasSuppo
         } else {
             return false;
         }
+    }
+
+    // =============== Generic Loading =============================================================
+
+    public void showLoading (){
+        if (mGenericLoading != null) mGenericLoading.setVisibility(View.VISIBLE);
+    }
+
+    public void hideLoading (){
+        if (mGenericLoading != null) mGenericLoading.setVisibility(View.GONE);
     }
 
     // =============== ShowDialogs =================================================================

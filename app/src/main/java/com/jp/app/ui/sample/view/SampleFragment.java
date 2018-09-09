@@ -63,6 +63,7 @@ public class SampleFragment extends BaseFragment<SampleFragmentBinding, SampleFr
 
     @Override
     public void subscribeToLiveData() {
+        super.subscribeToLiveData();
         mSampleViewModel.getSamples().observe(this, samples -> mSampleViewModel.addSamples(samples));
     }
 
