@@ -63,7 +63,13 @@ public class SampleFragment extends BaseFragment<SampleFragmentBinding, SampleFr
 
     @Override
     public void subscribeToLiveData() {
+        super.subscribeToLiveData();
         mSampleViewModel.getSamples().observe(this, samples -> mSampleViewModel.addSamples(samples));
+        mSampleViewModel.getSampleViewSelected().observe(this, sampleView -> {
+            if (mCallback != null) {
+                mCallback.loadSampleInfo(sampleView);
+            }
+        });
     }
 
     @Override
@@ -84,14 +90,6 @@ public class SampleFragment extends BaseFragment<SampleFragmentBinding, SampleFr
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mAdapter = new SampleAdapter(mSampleViewModel);
         mViewDataBinding.recyclerView.setAdapter(mAdapter);
-    }
-
-
-    @Override
-    public void loadSampleInfo(SampleView Sample) {
-        if (mCallback != null) {
-            mCallback.loadSampleInfo(Sample);
-        }
     }
 
     public SampleAdapter getAdapter() {

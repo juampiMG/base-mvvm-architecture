@@ -171,16 +171,28 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
     @LayoutRes
     int getLayoutId();
 
-    public abstract int getBindingVariable();
-
-    public abstract void subscribeToLiveData();
-
-
-    public String getFragmentId() {
-        return mFragmentId;
+    public void subscribeToLiveData(){
+        loadingSubscribe ();
+        errorMessageSubscribe();
     }
 
-    public abstract IBaseViewModel getViewModel() ;
+    private void loadingSubscribe (){
+        getViewModel().getIsLoading().observe(this, isLoading -> {
+            if (isLoading != null && isLoading) {
+                mCallback.showLoading();
+            } else {
+                mCallback.hideLoading();
+            }
+        });
+    }
+
+    private void errorMessageSubscribe () {
+        getViewModel().showErrorMessage().observe(this, showErrorMessage -> {
+            if (showErrorMessage != null) {
+                mCallback.showError(showErrorMessage.getTitle(), showErrorMessage.getMessage(), showErrorMessage.getActionOnError());
+            }
+        });
+    }
 
     public void setViewModel(BaseViewModel viewModel) {
         mViewModel = viewModel;
@@ -189,4 +201,14 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
     public TViewDataBinding getViewDataBinding() {
         return mViewDataBinding;
     }
+
+    public String getFragmentId() {
+        return mFragmentId;
+    }
+
+    public abstract IBaseViewModel getViewModel() ;
+
+    public abstract int getBindingVariable();
+
+
 }

@@ -31,6 +31,8 @@ public class SampleViewModel extends BaseViewModel<ISampleView> implements ISamp
 
     protected final MutableLiveData<List<SampleView>> mSampleViewMutableList;
 
+    protected final MutableLiveData<SampleView> mSampleViewSelected = new MutableLiveData<>();
+
     public final ObservableList<SampleView> mSampleViewObservableArrayList = new ObservableArrayList<>();
 
     List<SampleDomain> mSampleDomain;
@@ -44,11 +46,15 @@ public class SampleViewModel extends BaseViewModel<ISampleView> implements ISamp
 
     @Override
     public void sampleClicked(int adapterPosition) {
-        getView().loadSampleInfo(mSampleViewObservableArrayList.get(adapterPosition));
+        mSampleViewSelected.setValue(mSampleViewObservableArrayList.get(adapterPosition));
     }
 
     public MutableLiveData<List<SampleView>> getSamples() {
         return mSampleViewMutableList;
+    }
+
+    public MutableLiveData<SampleView> getSampleViewSelected() {
+        return mSampleViewSelected;
     }
 
     @Override
@@ -81,7 +87,7 @@ public class SampleViewModel extends BaseViewModel<ISampleView> implements ISamp
                     @Override
                     protected void onError(int code, String title, String description) {
                         setIsLoading(false);
-                        showError(title, description, BaseActivity.actionOnError.CLOSE);
+                        showErrorMessage(title, description, BaseActivity.actionOnError.CLOSE);
                     }
                 });
     }
