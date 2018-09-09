@@ -5,10 +5,10 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
-import android.databinding.ObservableBoolean;
 
 import com.jp.app.common.BaseActivity;
 import com.jp.app.common.view.IBaseView;
+import com.jp.app.model.ShowErrorMessage;
 
 import java.lang.ref.WeakReference;
 
@@ -23,6 +23,8 @@ public abstract class BaseViewModel<TBaseView extends IBaseView> extends ViewMod
     Application mApplication;
 
     private final MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
+
+    private final MutableLiveData<ShowErrorMessage> mShowMessage = new MutableLiveData<>();
 
     private CompositeDisposable mCompositeDisposable;
 
@@ -48,6 +50,11 @@ public abstract class BaseViewModel<TBaseView extends IBaseView> extends ViewMod
         return mIsLoading;
     }
 
+    @Override
+    public LiveData<ShowErrorMessage> showErrorMessage() {
+        return mShowMessage ;
+    }
+
     // =============== CompositeDispoable ==========================================================
 
     @Override
@@ -70,10 +77,12 @@ public abstract class BaseViewModel<TBaseView extends IBaseView> extends ViewMod
         mIsLoading.setValue(visibility);
     }
 
-    public void showError (String title, String message, BaseActivity.actionOnError actionOnError) {
-        if (getView() != null) {
-            getView().showError(title, message, actionOnError);
-        }
+    public void showErrorMessage (String title, String message, BaseActivity.actionOnError actionOnError) {
+        ShowErrorMessage showMessage = new ShowErrorMessage();
+        showMessage.setTitle (title);
+        showMessage.setMessage (message);
+        showMessage.setActionOnError (actionOnError);
+       mShowMessage.setValue(showMessage);
     }
 
 }

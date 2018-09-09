@@ -173,6 +173,7 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
 
     public void subscribeToLiveData(){
         loadingSubscribe ();
+        errorMessageSubscribe();
     }
 
     private void loadingSubscribe (){
@@ -181,6 +182,14 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
                 mCallback.showLoading();
             } else {
                 mCallback.hideLoading();
+            }
+        });
+    }
+
+    private void errorMessageSubscribe () {
+        getViewModel().showErrorMessage().observe(this, showErrorMessage -> {
+            if (showErrorMessage != null) {
+                mCallback.showError(showErrorMessage.getTitle(), showErrorMessage.getMessage(), showErrorMessage.getActionOnError());
             }
         });
     }
