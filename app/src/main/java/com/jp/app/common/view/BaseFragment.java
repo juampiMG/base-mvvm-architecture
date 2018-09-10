@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jp.app.common.BaseActivity;
 import com.jp.app.common.viewModel.BaseViewModel;
 import com.jp.app.common.viewModel.IBaseViewModel;
 
@@ -29,7 +28,7 @@ import dagger.android.support.AndroidSupportInjection;
 import dagger.android.support.HasSupportFragmentInjector;
 
 
-public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCallback extends IBaseFragmentCallback> extends Fragment implements HasSupportFragmentInjector, IBaseView {
+public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCallback extends IBaseFragmentCallback> extends Fragment implements HasSupportFragmentInjector{
 
 
     @Inject
@@ -46,7 +45,7 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
     protected ViewModelProvider.Factory mViewModelFactory;
 
 
-    private Unbinder mUnbinder;
+    private Unbinder mUnBinder;
     private String mFragmentId;
     protected int mLayoutId;
 
@@ -88,7 +87,6 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
         super.onCreate(savedInstanceState);
         mLayoutId = getLayoutId();
         mViewModel = getViewModel();
-        mViewModel.setView(this);
     }
 
     @Nullable
@@ -133,7 +131,7 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
          * no need to check if getView() returns null here because this lifecycle method only gets
          * called with a non-null View.
          */
-        mUnbinder = ButterKnife.bind(this, getView());
+        mUnBinder = ButterKnife.bind(this, getView());
         onViewLoaded(savedInstanceState, getView());
     }
 
@@ -145,6 +143,7 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
     }
 
     public void onViewLoaded(Bundle savedInstanceState, View view) {
+        subscribers ();
     }
 
     @Override
@@ -155,18 +154,15 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mUnbinder != null) {
-            mUnbinder.unbind();
+        if (mUnBinder != null) {
+            mUnBinder.unbind();
         }
     }
 
-    public abstract
-    @LayoutRes
-    int getLayoutId();
-
-    public void subscribeToLiveData() {
+    private void subscribers (){
         loadingSubscribe();
         errorMessageSubscribe();
+        subscribeToLiveData();
     }
 
     private void loadingSubscribe() {
@@ -188,19 +184,17 @@ public abstract class BaseFragment<TViewDataBinding extends ViewDataBinding, TCa
         });
     }
 
-    public void setViewModel(BaseViewModel viewModel) {
-        mViewModel = viewModel;
-    }
-
-    public TViewDataBinding getViewDataBinding() {
-        return mViewDataBinding;
-    }
-
     public String getFragmentId() {
         return mFragmentId;
     }
 
+    public abstract
+    @LayoutRes
+    int getLayoutId();
+
     public abstract IBaseViewModel getViewModel();
+
+    public abstract void subscribeToLiveData() ;
 
     public abstract int getBindingVariable();
 

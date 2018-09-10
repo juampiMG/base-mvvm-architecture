@@ -10,7 +10,6 @@ import com.jp.app.common.viewModel.BaseViewModel;
 import com.jp.app.model.SampleView;
 import com.jp.app.model.mapper.SampleViewMapper;
 import com.jp.app.ui.sample.adapter.SampleAdapter;
-import com.jp.app.ui.sample.view.ISampleView;
 import com.jp.domain.interactor.IGetSampleUseCase;
 import com.jp.domain.model.SampleDomain;
 
@@ -22,7 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class SampleViewModel extends BaseViewModel<ISampleView> implements ISampleViewModel, SampleAdapter.SampleAdapterCallBack {
+public class SampleViewModel extends BaseViewModel implements ISampleViewModel, SampleAdapter.SampleAdapterCallBack {
 
     @Inject
     IGetSampleUseCase mGetSampleUseCase;
@@ -64,8 +63,8 @@ public class SampleViewModel extends BaseViewModel<ISampleView> implements ISamp
     }
 
     @Override
-    public void callGetSamples() {
-        setIsLoading(true);
+    public void callGetSamplesUseCase() {
+        isLoading(true);
         mGetSampleUseCase.execute().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseSingleObserver<List<SampleDomain>>(this) {
@@ -77,7 +76,7 @@ public class SampleViewModel extends BaseViewModel<ISampleView> implements ISamp
 
                     @Override
                     public void onSuccess(List<SampleDomain> Sample) {
-                        setIsLoading(false);
+                        isLoading(false);
                         if (Sample != null) {
                             mSampleDomain = Sample;
                             mSampleViewMutableList.setValue(mSampleViewMapper.transform(Sample));
@@ -86,7 +85,7 @@ public class SampleViewModel extends BaseViewModel<ISampleView> implements ISamp
 
                     @Override
                     protected void onError(int code, String title, String description) {
-                        setIsLoading(false);
+                        isLoading(false);
                         showErrorMessage(title, description, BaseActivity.actionOnError.CLOSE);
                     }
                 });

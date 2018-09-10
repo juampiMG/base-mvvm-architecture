@@ -7,17 +7,14 @@ import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 
 import com.jp.app.common.BaseActivity;
-import com.jp.app.common.view.IBaseView;
 import com.jp.app.model.ShowErrorMessage;
-
-import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public abstract class BaseViewModel<TBaseView extends IBaseView> extends ViewModel implements IBaseViewModel {
+public abstract class BaseViewModel extends ViewModel implements IBaseViewModel {
 
     @Inject
     Application mApplication;
@@ -28,8 +25,6 @@ public abstract class BaseViewModel<TBaseView extends IBaseView> extends ViewMod
 
     private CompositeDisposable mCompositeDisposable;
 
-    private WeakReference<TBaseView> mWeakReference;
-
     public BaseViewModel() {
         this.mCompositeDisposable = new CompositeDisposable();
     }
@@ -39,11 +34,6 @@ public abstract class BaseViewModel<TBaseView extends IBaseView> extends ViewMod
     }
 
     // =============== IBaseViewModel ==============================================================
-
-    @Override
-    public void setView(IBaseView view) {
-        this.mWeakReference = new WeakReference<>((TBaseView) view);
-    }
 
     @Override
     public LiveData<Boolean> getIsLoading() {
@@ -69,11 +59,7 @@ public abstract class BaseViewModel<TBaseView extends IBaseView> extends ViewMod
         }
     }
 
-    public TBaseView getView() {
-        return mWeakReference.get();
-    }
-
-    public void setIsLoading(boolean visibility) {
+    public void isLoading(boolean visibility) {
         mIsLoading.setValue(visibility);
     }
 

@@ -13,5 +13,5 @@ public interface ISampleViewModel extends IBaseViewModel {
 
     void addSamples(List<SampleView> samples);
 
-    void callGetSamples();
+    void callGetSamplesUseCase();
 }

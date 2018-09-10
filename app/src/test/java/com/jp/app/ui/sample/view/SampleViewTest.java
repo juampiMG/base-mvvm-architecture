@@ -71,10 +71,6 @@ public class SampleViewTest extends BaseTest {
         Dialog dialog = ShadowDialog.getLatestDialog();
         assertEquals("The dialog should be displayed", dialog.isShowing(),true);
 
-        //        Intent expectedIntent = new Intent(mActivity, SampleInfoActivity.class);
-//        ShadowActivity shadowActivity = Shadows.shadowOf(mActivity);
-//        Intent actualIntent = shadowActivity.getNextStartedActivity();
-//        assertTrue(actualIntent.filterEquals(expectedIntent));
     }
 
 }

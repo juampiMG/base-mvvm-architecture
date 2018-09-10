@@ -12,11 +12,11 @@ public abstract class BaseSingleObserver<T> implements SingleObserver<T> {
 
     private Context mContext;
 
-    public BaseSingleObserver(Context context) {
+    protected BaseSingleObserver(Context context) {
         this.mContext = context;
     }
 
-    public BaseSingleObserver(BaseViewModel viewModel) {
+    protected BaseSingleObserver(BaseViewModel viewModel) {
         this(viewModel.getContext());
     }
 
@@ -27,7 +27,7 @@ public abstract class BaseSingleObserver<T> implements SingleObserver<T> {
 
     protected abstract void onError(int code, String title, String description);
 
-    protected void handleError(Throwable throwable) {
+    private void handleError(Throwable throwable) {
         int code = 0;
         String title = mContext.getString(R.string.oh_hell);
         String message = mContext.getString(R.string.default_error);

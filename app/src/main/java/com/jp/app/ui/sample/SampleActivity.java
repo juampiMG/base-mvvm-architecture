@@ -30,9 +30,6 @@ public class SampleActivity extends BaseActivity implements SampleFragment.Fragm
 
     @Override
     public void loadSampleInfo(SampleView sample) {
-        NavigationUtils.navigationToSampleInfoActivity(this, sample);
         showMessage(getString(R.string.information), String.format(getString(R.string.message_on_click), sample.getTitle()));
     }
-
-
 }

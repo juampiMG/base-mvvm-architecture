@@ -21,10 +21,6 @@ public abstract class SampleFragmentModule {
 
     @Binds
     @PerFragment
-    abstract ISampleView view(SampleFragment fragment);
-
-    @Binds
-    @PerFragment
     abstract ViewModelProvider.Factory provideSampleViewModel (ViewModelProviderFactory<SampleViewModel> sampleViewModel);
 
 
