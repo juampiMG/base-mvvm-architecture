@@ -21,7 +21,7 @@ import com.jp.app.ui.sample.viewModel.SampleViewModel;
 import butterknife.BindView;
 
 
-public class SampleFragment extends BaseFragment<SampleFragmentBinding, SampleFragment.FragmentCallback> implements ISampleView {
+public class SampleFragment extends BaseFragment<SampleFragmentBinding, SampleFragment.FragmentCallback> {
 
     public static final int LAYOUT_ID = R.layout.sample_fragment;
 
@@ -46,7 +46,7 @@ public class SampleFragment extends BaseFragment<SampleFragmentBinding, SampleFr
     }
 
     @Override
-    public BaseViewModel<ISampleView> getViewModel() {
+    public BaseViewModel getViewModel() {
         mSampleViewModel = ViewModelProviders.of(this, mViewModelFactory).get(SampleViewModel.class);
         return mSampleViewModel;
     }
@@ -62,8 +62,14 @@ public class SampleFragment extends BaseFragment<SampleFragmentBinding, SampleFr
     }
 
     @Override
+    public void onViewLoaded(Bundle savedInstanceState, View view) {
+        super.onViewLoaded(savedInstanceState, view);
+        setUpRecyclerView();
+        callGetSamples();
+    }
+
+    @Override
     public void subscribeToLiveData() {
-        super.subscribeToLiveData();
         mSampleViewModel.getSamples().observe(this, samples -> mSampleViewModel.addSamples(samples));
         mSampleViewModel.getSampleViewSelected().observe(this, sampleView -> {
             if (mCallback != null) {
@@ -72,16 +78,8 @@ public class SampleFragment extends BaseFragment<SampleFragmentBinding, SampleFr
         });
     }
 
-    @Override
-    public void onViewLoaded(Bundle savedInstanceState, View view) {
-        super.onViewLoaded(savedInstanceState, view);
-        setUpRecyclerView();
-        subscribeToLiveData();
-        callGetSamples();
-    }
-
     private void callGetSamples() {
-        mSampleViewModel.callGetSamples();
+        mSampleViewModel.callGetSamplesUseCase();
     }
 
     private void setUpRecyclerView() {
